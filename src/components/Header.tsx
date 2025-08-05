@@ -12,12 +12,14 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
+import LoginDialog from "./LoginDialog";
 // import LoginDialog from "@/components/LoginDialog";
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showLoginDialog, setShowLoginDialog] = useState(false);
-    //   const { isAuthenticated, user, logout } = useAuth();
+    const { isAuthenticated, user, logout } = useAuth();
     //   const navigate = useNavigate();
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -27,11 +29,9 @@ const Header = () => {
     };
 
     const handleAuthAction = () => {
-        // if (isAuthenticated) {
-        //   navigate('/meus-agendamentos');
-        // } else {
-        //   setShowLoginDialog(true);
-        // }
+        if (!isAuthenticated) {
+            setShowLoginDialog(true);
+        }
     };
 
     return (
@@ -40,7 +40,7 @@ const Header = () => {
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
                     <Link href="/" className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-gradient-accent rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-(image:--gradient-accent) rounded-lg flex items-center justify-center">
                             <Calendar className="w-5 h-5 text-accent-foreground" />
                         </div>
                         <span className="text-xl font-bold text-foreground">
@@ -74,7 +74,7 @@ const Header = () => {
                             <span>(11) 99999-9999</span>
                         </div>
 
-                        {/* {isAuthenticated ? (
+                        {isAuthenticated ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="outline" size="lg" className="flex items-center gap-2">
@@ -85,7 +85,7 @@ const Header = () => {
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem onClick={() => navigate('/meus-agendamentos')}>
+                                    <DropdownMenuItem onClick={() => { }}>
                                         <Calendar className="w-4 h-4 mr-2" />
                                         Meus Agendamentos
                                     </DropdownMenuItem>
@@ -100,7 +100,7 @@ const Header = () => {
                             <Button variant="hero" size="lg" onClick={handleAuthAction}>
                                 Fazer Login
                             </Button>
-                        )} */}
+                        )}
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -206,10 +206,10 @@ const Header = () => {
                 )}
             </div>
 
-            {/* <LoginDialog
+            <LoginDialog
                 open={showLoginDialog}
                 onOpenChange={setShowLoginDialog}
-            /> */}
+            />
         </header>
     );
 };
