@@ -26,23 +26,21 @@ import {
     MapPin,
     Users as UsersIcon,
     Phone,
-    CheckCircle
+    CheckCircle,
+    Clock
 } from "lucide-react";
 import LoginDialog from "@/components/LoginDialog";
 import { formatCurrency } from "@/lib/utils";
 import { useEffect, useState } from 'react';
-import useAgendamentos from '@/hooks/useAgendamentos';
-import { redirect, RedirectType } from 'next/navigation';
+import { toast } from 'sonner';
+import useAddAgendamento from '@/hooks/useAddAgendamento';
 
 export default function EventoPage({ eventoId }: { eventoId: number }) {
-    // se preferir usar useParams diretamente, basta:
-    // const { evento: eventoId } = useParams();
 
-    const { events } = useEventos()    // seu hook de contexto :contentReference[oaicite:5]{index=5}
+
+    const { events } = useEventos()
     const { isAuthenticated, user } = useAuth();
-    const { agendamentos, loading, fetchAgendamentos, addAgendamento } = useAgendamentos(user);
-
-
+    const addAgendamento = useAddAgendamento(user);
 
     const [showLoginDialog, setShowLoginDialog] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date>();
@@ -50,6 +48,7 @@ export default function EventoPage({ eventoId }: { eventoId: number }) {
     const [guestCount, setGuestCount] = useState("");
     const [address, setAddress] = useState("");
     const [notes, setNotes] = useState("");
+    const [hour, setHour] = useState("");
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -59,8 +58,6 @@ export default function EventoPage({ eventoId }: { eventoId: number }) {
         }
     }, [isAuthenticated]);
 
-
-
     const isDateUnavailable = (evento: Event, date: Date) => {
 
         return evento.dateInit > date || evento.dateEnd < date;
@@ -69,8 +66,8 @@ export default function EventoPage({ eventoId }: { eventoId: number }) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!selectedDate || !phone || !guestCount || !address) {
-            // toast.error("Por favor, preencha todos os campos obrigatórios");
+        if (!selectedDate || !phone || !guestCount || !address || !hour) {
+            toast.error("Por favor, preencha todos os campos obrigatórios");
             return;
         }
 
@@ -78,39 +75,27 @@ export default function EventoPage({ eventoId }: { eventoId: number }) {
         const novoAgendamento = {
             idEvent: eventoId,
             date: selectedDate,
-            hour: format(selectedDate, "HH:mm"),
+            hour: hour,
             address,
             numPeople: parseInt(guestCount)
         }
-        let redirected = false;
-        try {
-            await addAgendamento(novoAgendamento);
-            redirected = true;
-        } catch (error) {
-            // toast.error("Erro ao solicitar agendamento. Tente novamente.");
-        }
-        if (redirected)
-            redirect("/meus_agendamentos", RedirectType.replace);
 
 
-        // toast.success("Agendamento solicitado com sucesso!");
-        // navigate('/meus-agendamentos');
+        await addAgendamento(novoAgendamento);
     };
 
     if (events.length === 0) {
         return <p>Carregando eventos…</p>
     }
 
-    // Atenção: eventoId é string, id em Event também deve ser string
-    console.log("events:", events);
-    console.log("eventoId:", eventoId);
+
     const service = events.find((e: Event) => e.id === Number(eventoId))
 
     if (!service) {
         return <p style={{ marginTop: 200 }}>Evento “{eventoId}” não encontrado.</p>
     }
 
-    // Renderize os campos do evento
+
     return (
         <div className="min-h-screen">
 
@@ -122,9 +107,7 @@ export default function EventoPage({ eventoId }: { eventoId: number }) {
                         <div>
                             <Card className="shadow-large">
                                 <CardHeader className="text-center">
-                                    {/* <div className="mx-auto w-16 h-16 bg-(image:--gradient-accent) rounded-xl flex items-center justify-center mb-4">
-                                        <ServiceIcon className="w-8 h-8 text-accent-foreground" />
-                                    </div> */}
+
                                     <CardTitle className="text-2xl">{service && service.title}</CardTitle>
                                     <CardDescription className="text-lg">{service && service.description}</CardDescription>
                                     <div className="text-center mt-4">
@@ -132,19 +115,7 @@ export default function EventoPage({ eventoId }: { eventoId: number }) {
                                         <span className="text-muted-foreground ml-2">por pessoa</span>
                                     </div>
                                 </CardHeader>
-                                {/* <CardContent>
-                                    <div className="space-y-4">
-                                        <h4 className="font-semibold text-lg">Incluído no serviço:</h4>
-                                        <ul className="space-y-3">
-                                            {service.features.map((feature, idx) => (
-                                                <li key={idx} className="flex items-start space-x-3">
-                                                    <CheckCircle className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                                                    <span className="text-muted-foreground">{feature}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </CardContent> */}
+
                             </Card>
                         </div>
 
@@ -183,7 +154,20 @@ export default function EventoPage({ eventoId }: { eventoId: number }) {
                                                 </p>
                                             )}
                                         </div>
-
+                                        <div className="space-y-2">
+                                            <Label htmlFor="hour" className="flex items-center gap-2">
+                                                <Clock className="w-4 h-4" />
+                                                Horário do Evento *
+                                            </Label>
+                                            <Input
+                                                id="hour"
+                                                type="time"
+                                                placeholder="Ex: 14:00"
+                                                value={hour}
+                                                onChange={(e) => setHour(e.target.value)}
+                                                required
+                                            />
+                                        </div>
                                         {/* Phone */}
                                         <div className="space-y-2">
                                             <Label htmlFor="phone" className="flex items-center gap-2">
@@ -258,7 +242,7 @@ export default function EventoPage({ eventoId }: { eventoId: number }) {
             <LoginDialog
                 open={showLoginDialog}
                 onOpenChange={setShowLoginDialog}
-                onSuccess={() => setShowLoginDialog(false)}
+                onSuccess={() => { }}
             />
         </div>
     );

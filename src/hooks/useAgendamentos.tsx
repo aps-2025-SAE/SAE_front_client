@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import axios from "axios";
 import { Agendamento, User } from "@/types";
 import { redirect, RedirectType } from "next/navigation";
+import { toast } from "sonner";
 
 
 
@@ -57,42 +58,17 @@ const useAgendamentos = (user: User | null) => {
 
             setAgendamentos(parsedAgendamentos);
         } catch (error) {
+            toast.error("Erro ao buscar agendamentos. Por favor, tente novamente.");
             console.error("Error fetching agendamentos:", error);
         } finally {
             setLoading(false);
         }
     };
 
-    const addAgendamento = async (agendamento: Omit<Agendamento, "status" | "event">) => {
-        if (!user) return;
-
-        try {
-            setLoading(true);
-            const response = await axios.post("https://saeback-production.up.railway.app/api/cliente/pedido", {
-                evento_id: agendamento.idEvent,
-                data_solicitada: format(agendamento.date, "yyyy-MM-dd"),
-                horario: agendamento.hour,
-                endereco: agendamento.address,
-                quantidade_pessoas: agendamento.numPeople,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${user.token}`
-                }
-            })
 
 
 
-        } catch (error) {
-            console.error("Error adding agendamento:", error);
-            throw error;
-        } finally {
-            setLoading(false);
-        }
-
-    }
-
-
-    return { agendamentos, loading, fetchAgendamentos, addAgendamento };
+    return { agendamentos, loading, fetchAgendamentos };
 }
 
 export default useAgendamentos;

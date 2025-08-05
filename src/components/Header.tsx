@@ -85,10 +85,12 @@ const Header = () => {
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem onClick={() => { }}>
-                                        <Calendar className="w-4 h-4 mr-2" />
-                                        Meus Agendamentos
-                                    </DropdownMenuItem>
+                                    <Link href="/meus_agendamentos" passHref>
+                                        <DropdownMenuItem onClick={() => { }}>
+                                            <Calendar className="w-4 h-4 mr-2" />
+                                            Meus Agendamentos
+                                        </DropdownMenuItem>
+                                    </Link>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem onClick={logout}>
                                         <LogOut className="w-4 h-4 mr-2" />
@@ -157,49 +159,7 @@ const Header = () => {
                                     <span>(11) 99999-9999</span>
                                 </div>
 
-                                {/* {isAuthenticated ? (
-                                    <div className="space-y-2">
-                                        <div className="flex items-center gap-2 text-sm">
-                                            <div className="w-6 h-6 bg-accent text-accent-foreground rounded-full flex items-center justify-center text-xs font-semibold">
-                                                {user && getInitials(user.name)}
-                                            </div>
-                                            <span className="font-medium">{user?.name}</span>
-                                        </div>
-                                        <Button
-                                            variant="outline"
-                                            size="lg"
-                                            className="w-full"
-                                            onClick={() => {
-                                                navigate('/meus-agendamentos');
-                                                toggleMenu();
-                                            }}
-                                        >
-                                            Meus Agendamentos
-                                        </Button>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            className="w-full"
-                                            onClick={() => {
-                                                logout();
-                                                toggleMenu();
-                                            }}
-                                        >
-                                            Sair
-                                        </Button>
-                                    </div>
-                                ) : (
-                                    <Button
-                                        variant="hero"
-                                        size="lg"
-                                        onClick={() => {
-                                            handleAuthAction();
-                                            toggleMenu();
-                                        }}
-                                    >
-                                        Fazer Login
-                                    </Button>
-                                )} */}
+
                             </div>
                         </nav>
                     </div>

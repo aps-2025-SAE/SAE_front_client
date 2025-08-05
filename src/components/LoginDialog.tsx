@@ -23,7 +23,7 @@ const LoginDialog = ({ open, onOpenChange, onSuccess }: LoginDialogProps) => {
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const { login } = useAuth();
+    const { login, isAuthenticated } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -37,19 +37,10 @@ const LoginDialog = ({ open, onOpenChange, onSuccess }: LoginDialogProps) => {
         setName("");
         setPhone("");
         onSuccess?.();
-        // Simulate a brief loading state
-        //     setTimeout(() => {
-        //         login(name.trim(), phone.trim());
-        //         setIsLoading(false);
-        //         onOpenChange(false);
-        //         setName("");
-        //         setPhone("");
-        //         onSuccess?.();
-        //     }, 500);
     };
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={isAuthenticated ? onOpenChange : () => { }}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle className="text-center">Acesso Rápido</DialogTitle>

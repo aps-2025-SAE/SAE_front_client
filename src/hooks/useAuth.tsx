@@ -1,6 +1,7 @@
 import { User } from '@/types';
 import axios, { AxiosError } from 'axios';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { toast } from 'sonner';
 
 
 
@@ -26,34 +27,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const login = async (name: string, phone: string) => {
 
         try {
-
-
-            // const responseLogin = await fetch("https://saeback-production.up.railway.app/api/cliente/login", {
-            //     method: 'POST',
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //         "access-control-allow-origin": "*",
-            //         "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-            //     },
-            //     body: JSON.stringify({ telefone: phone, password: "123456" }),
-            //     mode: 'no-cors',
-            // });
-
             const responseLogin = await axios.post("https://saeback-production.up.railway.app/api/cliente/login", {
                 telefone: phone, password: "123456",
             });
-
-            console.log("responseLogin", responseLogin);
-            // const data = await responseLogin.json();
             const data = await responseLogin.data;
-
-            // const responseLogin = await fetch(requestLogin);
-            console.log("Response status:", responseLogin.status);
-            console.log("response", data);
-
-
-
-
             const userData: User = {
                 id: data.cliente.id,
                 name: name,
@@ -63,9 +40,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
             setUser(userData);
             localStorage.setItem('user', JSON.stringify(userData));
-
-
-
         } catch (error) {
             console.error("Login error:", error);
             if ((error as AxiosError).status === 401) {
@@ -85,6 +59,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
                 setUser(userData);
                 localStorage.setItem('user', JSON.stringify(userData));
+                toast.success("Login bem sucedido!");
+            } else {
+                toast.error("Erro ao fazer login. Por favor, tente novamente.");
             }
         }
     };
@@ -93,6 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const logout = () => {
         setUser(null);
         localStorage.removeItem('user');
+        toast.success("Logout bem sucedido!");
     };
 
     const isAuthenticated = !!user;

@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, useContext, useEffect, useState } from "react";
 import type { Event } from "@/types";
+import { toast } from "sonner";
 
 const addHourToDate = (date: any) => {
     const newDate = new Date(date);
@@ -30,7 +31,7 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             const response = await fetch("https://saeback-production.up.railway.app/api/eventos");
             const data = await response.json();
-            console.log("Fetched events:", data);
+
             setEvents(data.map((evento: any) => ({
                 id: evento.id,
                 title: evento.tipo,
@@ -43,6 +44,7 @@ export const EventProvider = ({ children }: { children: React.ReactNode }) => {
 
         } catch (error) {
             console.error("Error fetching events:", error);
+            toast.error("Erro ao buscar eventos. Por favor, tente novamente.");
         } finally {
             setLoading(false);
         }
