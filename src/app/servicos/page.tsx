@@ -59,7 +59,7 @@ const Servicos = () => {
                 {events.map((service, index) => (
                   <Card
                     key={index}
-                    className={`relative hover:shadow-large transition-all duration-300 hover:-translate-y-2`}
+                    className={`relative hover:shadow-large transition-all duration-300 hover:-translate-y-2 justify-between`}
                   >
                     <CardHeader className="text-center pb-6">
                       <CardTitle className="text-xl mb-2">
