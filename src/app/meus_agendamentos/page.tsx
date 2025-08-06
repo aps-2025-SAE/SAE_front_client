@@ -110,7 +110,8 @@ const MeusAgendamentos = () => {
                         variant="outline"
                         className={getStatusColor(agendamento.status)}
                       >
-                        {agendamento.status}
+                        {agendamento.status.charAt(0).toUpperCase() +
+                          agendamento.status.slice(1)}
                       </Badge>
                     </div>
                   </CardHeader>
@@ -126,7 +127,8 @@ const MeusAgendamentos = () => {
                                 new Date(agendamento.date),
                                 "dd 'de' MMMM 'de' yyyy",
                                 { locale: ptBR }
-                              )}
+                              )}{" "}
+                              às {agendamento.hour}
                             </p>
                           </div>
                         </div>

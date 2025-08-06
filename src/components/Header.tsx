@@ -63,7 +63,7 @@ const Header = () => {
             >
               Serviços
             </Link>
-            <Link
+            {/* <Link
               href="/#calendario"
               className="text-foreground hover:text-accent transition-colors"
             >
@@ -80,7 +80,7 @@ const Header = () => {
               className="text-foreground hover:text-accent transition-colors"
             >
               Contato
-            </Link>
+            </Link> */}
           </nav>
 
           {/* Contact & CTA */}

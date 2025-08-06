@@ -29,14 +29,14 @@ const Servicos = () => {
               </div>
 
               <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-                Sabores que Marcam
-                <span className="text-accent block">Momentos Especiais</span>
+                Para cada sonho
+                <span className="text-accent block">Um evento único</span>
               </h1>
 
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Oferecemos uma gama completa de serviços gastronômicos, desde
-                coffee breaks corporativos até casamentos premium, sempre com a
-                excelência que nos define.
+                Dos pequenos encontros às grandes celebrações, cuidamos de tudo
+                com carinho e excelência, proporcionando experiências únicas e
+                memoráveis para você e seus convidados.
               </p>
             </div>
 
