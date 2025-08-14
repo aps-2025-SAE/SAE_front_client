@@ -20,7 +20,7 @@ const useAgendamentos = (user: User | null) => {
     try {
       setLoading(true);
       const response = await axios.get(
-        "https://saeback-production.up.railway.app/api/cliente/agendamentos",
+        "https://saeback-production-fe02.up.railway.app/api/cliente/agendamentos",
         {
           headers: {
             Authorization: `Bearer ${user.token}`,

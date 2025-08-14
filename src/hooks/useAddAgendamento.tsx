@@ -15,7 +15,7 @@ const useAddAgendamento = (user: User | null) => {
     let redirected = false;
     try {
       await axios.post(
-        "https://saeback-production.up.railway.app/api/cliente/pedido",
+        "https://saeback-production-fe02.up.railway.app/api/cliente/pedido",
         {
           evento_id: agendamento.idEvent,
           data_solicitada: format(agendamento.date, "yyyy-MM-dd"),
